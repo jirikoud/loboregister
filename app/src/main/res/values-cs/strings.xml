@@ -10,4 +10,8 @@
     <string name="api_toast_offline">Jste offline, ale tato akce vyžaduje připojení k internetu.</string>
     <string name="api_toast_connection_failed">Připojení selhalo, zkuste to znovu později.</string>
 
+    <!-- ContactList Fragment -->
+    <string name="contact_list_search">Hledat</string>
+    <string name="contact_list_total_format">%1$d záznamů</string>
+
 </resources>

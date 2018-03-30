@@ -118,7 +118,7 @@ public class Api {
                         httpConnection = (HttpsURLConnection) new URL(urlString).openConnection();
                         httpConnection.setDoInput(true);
                         httpConnection.setRequestProperty("Accept-Encoding", "gzip, deflate");
-                        httpConnection.setRequestProperty("Content-type", "application/json");
+//                        httpConnection.setRequestProperty("Content-type", "application/json");
                         int statusCode = httpConnection.getResponseCode();
                         if (statusCode == HttpsURLConnection.HTTP_OK) {
                             return delegate.onResponse(urlString, Api.getResponseString(statusCode, httpConnection));

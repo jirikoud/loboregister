@@ -16,4 +16,50 @@
   }
 }
     </string>
+    <string name="query_report_list">
+{
+  searchReports(first:%1$d) {
+    pageInfo {
+      endCursor
+    }
+    edges {
+      node {
+        id
+        date
+        author {
+          id
+          firstName
+          lastName
+          extra
+        }
+        body
+      }
+    }
+    totalCount
+  }
+}
+    </string>
+    <string name="query_report_list_after">
+{
+  searchReports(first:%1$d,after:%2$s) {
+    pageInfo {
+      endCursor
+    }
+    edges {
+      node {
+        id
+        date
+        author {
+          id
+          firstName
+          lastName
+          extra
+        }
+        body
+      }
+    }
+    totalCount
+  }
+}
+    </string>
 </resources>

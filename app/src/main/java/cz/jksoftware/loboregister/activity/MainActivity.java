@@ -11,7 +11,7 @@ import android.view.MenuItem;
 
 import cz.jksoftware.loboregister.R;
 import cz.jksoftware.loboregister.fragment.AuthorListFragment;
-import cz.jksoftware.loboregister.fragment.ContactListFragment;
+import cz.jksoftware.loboregister.fragment.ReportListFragment;
 import cz.jksoftware.loboregister.interfaces.MainInterface;
 
 public class MainActivity extends AppCompatActivity implements MainInterface {
@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity implements MainInterface {
                 Fragment fragment = null;
                 switch (item.getItemId()){
                     case R.id.menu_item_contacts:
-                        fragment = new ContactListFragment();
+                        fragment = new ReportListFragment();
                         break;
                     case R.id.menu_item_authors:
                         fragment = new AuthorListFragment();

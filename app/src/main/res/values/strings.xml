@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Register of lobbyist contacts</string>
+
+    <!-- Menu Items -->
+    <string name="menu_item_contacts">Contacts</string>
+    <string name="menu_item_authors">Authors</string>
+
+    <!-- API Toast -->
+    <string name="api_toast_offline">You are offline, this action requires internet connection.</string>
+    <string name="api_toast_connection_failed">Connection failed, please try again later.</string>
+</resources>

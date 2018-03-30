@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="query_author_list">
+{
+  authors(first:10000) {
+    edges {
+      node {
+        id
+        firstName
+        lastName
+        hasCollidingName
+        totalReports
+        extra
+      }
+    }
+  }
+}
+    </string>
+</resources>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Registr lobistických kontaktů</string>
+
+    <!-- Menu Items -->
+    <string name="menu_item_contacts">Kontakty</string>
+    <string name="menu_item_authors">Autoři</string>
+
+    <!-- API Toast -->
+    <string name="api_toast_offline">Jste offline, ale tato akce vyžaduje připojení k internetu.</string>
+    <string name="api_toast_connection_failed">Připojení selhalo, zkuste to znovu později.</string>
+
+</resources>

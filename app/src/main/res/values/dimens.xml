@@ -2,4 +2,11 @@
 <resources>
     <dimen name="margin_primary">12dp</dimen>
     <dimen name="margin_secondary">6dp</dimen>
+    <dimen name="dialog_min_width">300dp</dimen>
+
+    <!-- TextSize -->
+    <dimen name="button_text_size">12sp</dimen>
+    <dimen name="edit_text_size">18sp</dimen>
+    <dimen name="hint_text_size">11sp</dimen>
+
 </resources>

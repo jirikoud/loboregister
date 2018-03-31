@@ -1,10 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorPrimary">#373737</color>
+    <color name="colorPrimaryDark">#000000</color>
+    <color name="colorAccent">#2D84CD</color>
+    <color name="colorWhite">#FFFFFF</color>
 
+    <!-- Bottom menu -->
     <color name="colorBottomMenu">#FFFFFF</color>
-    <color name="colorBottomInactive">#ADB5CD</color>
+    <color name="colorBottomInactive">#808080</color>
+
+    <!-- Flat Button -->
+    <color name="button_flat_text">#000000</color>
+    <color name="button_flat_text_disabled">#42000000</color>
 
 </resources>

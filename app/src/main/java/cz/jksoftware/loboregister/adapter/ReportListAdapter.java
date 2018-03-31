@@ -2,6 +2,7 @@ package cz.jksoftware.loboregister.adapter;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,23 +22,28 @@ import cz.jksoftware.loboregister.api.model.ReportModel;
  * Adapter for RecyclerView with Reports
  */
 
-public class ReportListAdapter extends RecyclerView.Adapter<ReportListAdapter.ViewHolder> {
+public class ReportListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     @SuppressWarnings("unused")
     private static final String TAG = "ReportListAdapter";
 
-    public interface ClickListener {
-        void onAuthorItemClicked(String authorId);
+    private static final int VIEW_TYPE_REPORT = 0;
+    private static final int VIEW_TYPE_PROGRESS = 1;
+
+    public interface EventListener {
+        void onReportItemClicked(String authorId);
+
+        void onLoadMoreReports();
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder {
+    class ReportViewHolder extends RecyclerView.ViewHolder {
 
         View mViewContent;
         TextView mTextViewFullName;
         TextView mTextViewDate;
         TextView mTextViewBody;
 
-        ViewHolder(View itemView) {
+        ReportViewHolder(View itemView) {
             super(itemView);
             mViewContent = itemView.findViewById(R.id.view_content);
             mTextViewFullName = itemView.findViewById(R.id.text_view_name);
@@ -52,40 +58,92 @@ public class ReportListAdapter extends RecyclerView.Adapter<ReportListAdapter.Vi
             mViewContent.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (mClickListener.get() != null) {
-                        mClickListener.get().onAuthorItemClicked(model.authorId);
+                    if (mEventListener.get() != null) {
+                        mEventListener.get().onReportItemClicked(model.authorId);
                     }
                 }
             });
         }
     }
 
-    private LayoutInflater mInflater;
-    private WeakReference<ClickListener> mClickListener;
-    private List<ReportModel> mItemList;
-    private DateFormat mDateFormat;
+    class ProgressViewHolder extends RecyclerView.ViewHolder {
 
-    public ReportListAdapter(Context context, ClickListener clickListener, List<ReportModel> itemList) {
+        ProgressViewHolder(View itemView) {
+            super(itemView);
+        }
+    }
+
+    private LayoutInflater mInflater;
+    private WeakReference<EventListener> mEventListener;
+    private List<ReportModel> mItemList;
+    private int mTotalCount;
+    private DateFormat mDateFormat;
+    private boolean mIsLoading;
+    private int visibleThreshold = 5;
+
+    public ReportListAdapter(Context context, EventListener eventListener, List<ReportModel> itemList, int totalCount, RecyclerView recyclerView) {
         mInflater = LayoutInflater.from(context);
-        mClickListener = new WeakReference<>(clickListener);
+        mEventListener = new WeakReference<>(eventListener);
         mItemList = itemList;
+        mTotalCount = totalCount;
         mDateFormat = SimpleDateFormat.getDateInstance();
+        if (recyclerView.getLayoutManager() instanceof LinearLayoutManager) {
+            final LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+            recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+                @Override
+                public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                    super.onScrolled(recyclerView, dx, dy);
+                    int totalItemCount = linearLayoutManager.getItemCount();
+                    int lastVisibleItem = linearLayoutManager.findLastVisibleItemPosition();
+                    if (!mIsLoading && totalItemCount <= (lastVisibleItem + visibleThreshold)) {
+                        // End has been reached
+                        // Do something
+                        if (mEventListener.get() != null) {
+                            mEventListener.get().onLoadMoreReports();
+                        }
+                        mIsLoading = true;
+                    }
+                }
+            });
+        }
+    }
+
+    public void addReports(List<ReportModel> reportList) {
+        int startIndex = mItemList.size();
+        mItemList.addAll(reportList);
+        notifyItemRangeInserted(startIndex, reportList.size());
+        mIsLoading = false;
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        if (position < mItemList.size()){
+            return VIEW_TYPE_REPORT;
+        }
+        return VIEW_TYPE_PROGRESS;
     }
 
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = mInflater.inflate(R.layout.item_report, parent, false);
-        return new ViewHolder(view);
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        if (viewType == VIEW_TYPE_REPORT) {
+            View view = mInflater.inflate(R.layout.item_report, parent, false);
+            return new ReportViewHolder(view);
+        } else {
+            View view = mInflater.inflate(R.layout.item_progress, parent, false);
+            return new ProgressViewHolder(view);
+        }
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.setModel(mItemList.get(position));
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+        if (holder instanceof ReportViewHolder) {
+            ((ReportViewHolder) holder).setModel(mItemList.get(position));
+        }
     }
 
     @Override
     public int getItemCount() {
-        return mItemList.size();
+        return mItemList.size() + (mItemList.size() == mTotalCount ? 0 : 1);
     }
 }

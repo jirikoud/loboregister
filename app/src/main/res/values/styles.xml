@@ -8,4 +8,19 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <!-- Material Design Buttons -->
+
+    <style name="FlatButton">
+        <item name="android:textSize">@dimen/button_text_size</item>
+        <item name="android:textColor">@color/button_flat_text_select</item>
+        <item name="android:textAllCaps">true</item>
+    </style>
+
+    <style name="ColoredButton" parent="ThemeOverlay.AppCompat.Dark">
+        <item name="android:textSize">@dimen/button_text_size</item>
+        <item name="android:textColor">@color/colorWhite</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorButtonNormal">@color/colorAccent</item>
+    </style>
+
 </resources>

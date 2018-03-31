@@ -102,12 +102,10 @@ public class Api {
         public abstract T onFailed(String url, int errorCode, String responseString);
     }
 
+    @SuppressWarnings("SameParameterValue")
     public static <T extends ApiResultModel> T getApiGetResponse(Context context, String methodName, ServerUrlParam[] parameters, ResponseDelegate<T> delegate) {
         String urlString = null;
         try {
-            //TODO Vyhodit, pouze pro testovani
-            Thread.sleep(1000);
-
             urlString = ServerUrlBuilder.buildURIString(Api.getApiUrl(), methodName, parameters);
 
             for (int attempt = 1; attempt <= Api.MAX_ATTEMPTS_TO_CONNECTION; attempt++) {
@@ -118,7 +116,6 @@ public class Api {
                         httpConnection = (HttpsURLConnection) new URL(urlString).openConnection();
                         httpConnection.setDoInput(true);
                         httpConnection.setRequestProperty("Accept-Encoding", "gzip, deflate");
-//                        httpConnection.setRequestProperty("Content-type", "application/json");
                         int statusCode = httpConnection.getResponseCode();
                         if (statusCode == HttpsURLConnection.HTTP_OK) {
                             return delegate.onResponse(urlString, Api.getResponseString(statusCode, httpConnection));
@@ -150,6 +147,7 @@ public class Api {
         return delegate.onFailed(urlString, HTTP_CODE_FAILED, null);
     }
 
+    @SuppressWarnings("unused")
     public static <T extends ApiResultModel> T getApiPostResponse(Context context, String methodName, ServerUrlParam[] parameters, ResponseDelegate<T> delegate) {
         String urlString = null;
         try {
@@ -203,7 +201,7 @@ public class Api {
         return delegate.onFailed(urlString, HTTP_CODE_FAILED, null);
     }
 
-    public static boolean isOnline(Context context) {
+    private static boolean isOnline(Context context) {
         ConnectivityManager manager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         if (manager != null) {
             NetworkInfo networkInfo = manager.getActiveNetworkInfo();

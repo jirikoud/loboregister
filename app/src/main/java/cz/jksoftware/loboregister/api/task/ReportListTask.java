@@ -2,6 +2,7 @@ package cz.jksoftware.loboregister.api.task;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -29,7 +30,7 @@ public class ReportListTask extends AsyncTask<Context, Void, ReportListTask.Resu
     private static final String TAG = "AuthorListTask";
 
     public interface ResultDelegate {
-        void onReportListTaskFinished(LoadStatus loadStatus, ReportPageModel model, ErrorModel errorModel);
+        void onReportListTaskFinished(LoadStatus loadStatus, String query, String after, ReportPageModel model, ErrorModel errorModel);
     }
 
     class ResultModel extends ApiResultModel {
@@ -42,21 +43,38 @@ public class ReportListTask extends AsyncTask<Context, Void, ReportListTask.Resu
     }
 
     private final WeakReference<ResultDelegate> mDelegate;
+    private final String mAfter;
+    private final String mQuery;
 
-    public ReportListTask(ResultDelegate delegate) {
+    public ReportListTask(ResultDelegate delegate, String after, String query) {
         mDelegate = new WeakReference<>(delegate);
+        mAfter = after;
+        mQuery = query;
     }
 
     @Override
     protected ResultModel doInBackground(final Context... params) {
+        JSONObject queryParams = new JSONObject();
+        try {
+            queryParams.put("first", Constants.REPORT_PAGE_SIZE);
+            if (mAfter != null) {
+                queryParams.put("after", mAfter);
+            }
+            if (mQuery != null) {
+                queryParams.put("query", mQuery);
+            }
+        } catch (Exception exception) {
+            Log.e(TAG, "Error creating GraphQL params", exception);
+        }
         ServerUrlParam[] postParameters = new ServerUrlParam[]{
-                new ServerUrlParam("query", String.format(params[0].getString(R.string.query_report_list), Constants.REPORT_PAGE_SIZE))
+                new ServerUrlParam("query", params[0].getString(R.string.query_report_list)),
+                new ServerUrlParam("variables", queryParams.toString())
         };
         return (ResultModel) Api.getApiGetResponse(params[0], "graphql", postParameters, new Api.ResponseDelegate() {
             @Override
             public Object onResponse(String url, String responseString) throws Exception {
                 JSONObject jsonObject = new JSONObject(responseString);
-                if (jsonObject.has("data")){
+                if (jsonObject.has("data")) {
                     ReportPageModel model = new ReportPageModel();
                     JSONObject reportsObject = jsonObject.getJSONObject("data").getJSONObject("searchReports");
                     JSONArray authorArray = reportsObject.getJSONArray("edges");
@@ -82,14 +100,14 @@ public class ReportListTask extends AsyncTask<Context, Void, ReportListTask.Resu
     @Override
     protected void onPostExecute(final ResultModel result) {
         if (mDelegate.get() != null) {
-            mDelegate.get().onReportListTaskFinished(result.loadStatus, result.model, result.errorModel);
+            mDelegate.get().onReportListTaskFinished(result.loadStatus, mQuery, mAfter, result.model, result.errorModel);
         }
     }
 
     @Override
     protected void onCancelled() {
         if (mDelegate.get() != null) {
-            mDelegate.get().onReportListTaskFinished(LoadStatus.CANCELED, null, null);
+            mDelegate.get().onReportListTaskFinished(LoadStatus.CANCELED, mQuery, mAfter, null, null);
         }
     }
 }

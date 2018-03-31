@@ -5,10 +5,15 @@
     <!-- Menu Items -->
     <string name="menu_item_contacts">Kontakty</string>
     <string name="menu_item_authors">Autoři</string>
+    <string name="menu_item_search">Hledat</string>
 
     <!-- API Toast -->
     <string name="api_toast_offline">Jste offline, ale tato akce vyžaduje připojení k internetu.</string>
     <string name="api_toast_connection_failed">Připojení selhalo, zkuste to znovu později.</string>
+
+    <!-- ReportList Fragment -->
+    <string name="report_list_button_confirm">Potvrdit</string>
+    <string name="report_list_button_cancel">Zrušit</string>
 
     <!-- ContactList Fragment -->
     <string name="contact_list_search">Hledat</string>

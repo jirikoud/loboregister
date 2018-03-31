@@ -8,6 +8,9 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -21,6 +24,8 @@ import cz.jksoftware.loboregister.api.model.ErrorModel;
 import cz.jksoftware.loboregister.api.model.ReportPageModel;
 import cz.jksoftware.loboregister.api.task.ReportListTask;
 import cz.jksoftware.loboregister.api.util.FragmentApiUtils;
+import cz.jksoftware.loboregister.dialog.SearchDialog;
+import cz.jksoftware.loboregister.infrastructure.StringUtils;
 import cz.jksoftware.loboregister.interfaces.MainInterface;
 
 /**
@@ -28,7 +33,7 @@ import cz.jksoftware.loboregister.interfaces.MainInterface;
  * List of lobbyist contacts
  */
 
-public class ReportListFragment extends Fragment implements ReportListTask.ResultDelegate, ReportListAdapter.ClickListener {
+public class ReportListFragment extends Fragment implements ReportListTask.ResultDelegate, ReportListAdapter.EventListener, SearchDialog.ResultListener {
 
     @SuppressWarnings("unused")
     private static final String TAG = "ReportListFragment";
@@ -37,24 +42,51 @@ public class ReportListFragment extends Fragment implements ReportListTask.Resul
     private TextView mTextViewCount;
     private ProgressBar mProgressBar;
     private RecyclerView mRecyclerView;
+    private ReportListAdapter mAdapter;
+
+    private String mCursor;
+    private String mQuery;
 
     @Override
-    public void onReportListTaskFinished(LoadStatus loadStatus, ReportPageModel model, ErrorModel errorModel) {
+    public void onReportListTaskFinished(LoadStatus loadStatus, String query, String after, ReportPageModel model, ErrorModel errorModel) {
+        if (!StringUtils.isEqual(mQuery, query) || !StringUtils.isEqual(mCursor, after)) {
+            return;
+        }
         mProgressBar.setVisibility(View.GONE);
         boolean isDone = FragmentApiUtils.processTaskResponse(loadStatus, getActivity(), errorModel);
         if (isDone) {
             return;
         }
         if (loadStatus == LoadStatus.SUCCESS) {
-            mRecyclerView.setVisibility(View.VISIBLE);
-            mRecyclerView.setAdapter(new ReportListAdapter(getContext(), this, model.reportList));
-            mTextViewCount.setText(String.format(getString(R.string.contact_list_total_format), model.totalCount));
+            if (mCursor == null) {
+                mRecyclerView.setVisibility(View.VISIBLE);
+                mAdapter = new ReportListAdapter(getContext(), this, model.reportList, model.totalCount, mRecyclerView);
+                mRecyclerView.setAdapter(mAdapter);
+                mTextViewCount.setText(String.format(getString(R.string.contact_list_total_format), model.totalCount));
+            } else {
+                mAdapter.addReports(model.reportList);
+            }
+            mCursor = model.cursor;
         }
     }
 
     @Override
-    public void onAuthorItemClicked(String authorId) {
+    public void onReportItemClicked(String authorId) {
 
+    }
+
+    @Override
+    public void onLoadMoreReports() {
+        new ReportListTask(this, mCursor, mQuery).execute(getContext());
+    }
+
+    @Override
+    public void onSearchQueryEntered(String query) {
+        mQuery = query;
+        mCursor = null;
+        mProgressBar.setVisibility(View.VISIBLE);
+        mRecyclerView.setVisibility(View.GONE);
+        new ReportListTask(this, null, mQuery).execute(getContext());
     }
 
     //region --- Fragment Lifecycle ---
@@ -82,7 +114,24 @@ public class ReportListFragment extends Fragment implements ReportListTask.Resul
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
         mRecyclerView.addItemDecoration(new DividerItemDecoration(mRecyclerView.getContext(), RecyclerView.VERTICAL));
         mRecyclerView.setVisibility(View.GONE);
-        new ReportListTask(this).execute(getContext());
+        new ReportListTask(this, null, null).execute(getContext());
+        setHasOptionsMenu(true);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.report_list_menu, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_item_search:
+                SearchDialog dialog = SearchDialog.newInstance(this, mQuery);
+                dialog.show(getChildFragmentManager(), "Search");
+                break;
+        }
+        return true;
     }
 
     //endregion

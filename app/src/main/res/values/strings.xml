@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Register of lobbyist contacts</string>
+    <string name="app_name">Register of contacts</string>
+    <string name="app_long_name">Register of lobbyist contacts</string>
 
     <!-- Menu Items -->
     <string name="menu_item_contacts">Contacts</string>
@@ -11,11 +12,21 @@
     <string name="api_toast_offline">You are offline, this action requires internet connection.</string>
     <string name="api_toast_connection_failed">Connection failed, please try again later.</string>
 
-    <!-- ReportList Fragment -->
+    <!-- Report List -->
     <string name="report_list_button_confirm">Confirm</string>
     <string name="report_list_button_cancel">Cancel</string>
 
-    <!-- ContactList Fragment -->
+    <!-- Contact List -->
     <string name="contact_list_search">Search</string>
-    <string name="contact_list_total_format">%1$d records</string>
+
+    <!-- Report Detail -->
+    <string name="report_detail_author">Author:</string>
+    <string name="report_detail_date">Date:</string>
+    <string name="report_detail_published">Published:</string>
+    <string name="report_detail_received">Received advantages</string>
+    <string name="report_detail_provided">Provided advantages</string>
+
+    <!-- Author Detail -->
+    <string name="author_detail_name">Name:</string>
+    <string name="author_detail_total">Reports:</string>
 </resources>

@@ -10,7 +10,10 @@ import android.os.Bundle;
 import android.view.MenuItem;
 
 import cz.jksoftware.loboregister.R;
+import cz.jksoftware.loboregister.api.model.ReportModel;
+import cz.jksoftware.loboregister.fragment.AuthorDetailFragment;
 import cz.jksoftware.loboregister.fragment.AuthorListFragment;
+import cz.jksoftware.loboregister.fragment.ReportDetailFragment;
 import cz.jksoftware.loboregister.fragment.ReportListFragment;
 import cz.jksoftware.loboregister.interfaces.MainInterface;
 
@@ -21,12 +24,39 @@ public class MainActivity extends AppCompatActivity implements MainInterface {
 
     private static final String BACK_STACK_ROOT_TAG = "root_fragment";
 
+    @Override
+    public void onReportSelected(ReportModel reportModel) {
+        ReportDetailFragment fragment = new ReportDetailFragment();
+        Bundle arguments = new Bundle();
+        arguments.putSerializable(ReportDetailFragment.EXTRA_REPORT, reportModel);
+        fragment.setArguments(arguments);
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_right);
+        fragmentTransaction.replace(R.id.fragment_container, fragment);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
+    }
+
+    @Override
+    public void onAuthorSelected(String authorId) {
+        AuthorDetailFragment fragment = new AuthorDetailFragment();
+        Bundle arguments = new Bundle();
+        arguments.putSerializable(AuthorDetailFragment.EXTRA_AUTHOR_ID, authorId);
+        fragment.setArguments(arguments);
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_right);
+        fragmentTransaction.replace(R.id.fragment_container, fragment);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
+    }
+
     //region --- Activity life-cycle ---
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        setTitle(R.string.app_long_name);
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_menu);
         bottomNavigationView.inflateMenu(R.menu.bottom_menu);

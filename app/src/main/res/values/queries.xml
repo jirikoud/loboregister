@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="query_author_list">
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="query_author_list" translatable="false">
 {
   authors(first:10000) {
     edges {
@@ -16,7 +16,7 @@
   }
 }
     </string>
-    <string name="query_report_list">
+    <string name="query_report_list" translatable="false">
 query ($first: Int!, $after: String, $query: String){
   searchReports(first:$first, after:$after, query:$query) {
     pageInfo {
@@ -26,16 +26,55 @@ query ($first: Int!, $after: String, $query: String){
       node {
         id
         date
+        published
+        body
+        receivedBenefit
+        providedBenefit
         author {
           id
           firstName
           lastName
           extra
         }
-        body
       }
     }
     totalCount
+  }
+}
+    </string>
+    <string name="query_author_detail" translatable="false" tools:ignore="TypographyEllipsis">
+query ($id: ID!, $first: Int!, $after: String){
+  node(id:$id) {
+    id
+    ... on Author{
+      firstName
+      lastName
+      totalReports
+      hasCollidingName
+      extra
+      reports(first:$first,after:$after) {
+        edges {
+          node {
+            id
+		    date
+    		published
+        	author {
+		      id
+    		  firstName
+        	  lastName
+            }
+		    body
+		    receivedBenefit
+    		providedBenefit
+        	extra
+          }
+        }
+        totalCount
+        pageInfo {
+          endCursor
+        }
+      }
+    }
   }
 }
     </string>

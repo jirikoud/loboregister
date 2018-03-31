@@ -37,6 +37,8 @@ public class AuthorListFragment extends Fragment implements AuthorListTask.Resul
     private ProgressBar mProgressBar;
     private RecyclerView mRecyclerView;
 
+    private List<AuthorModel> mModelList;
+
     @Override
     public void onAuthorListTaskFinished(LoadStatus loadStatus, List<AuthorModel> modelList, ErrorModel errorModel) {
         mProgressBar.setVisibility(View.GONE);
@@ -45,14 +47,17 @@ public class AuthorListFragment extends Fragment implements AuthorListTask.Resul
             return;
         }
         if (loadStatus == LoadStatus.SUCCESS) {
+            mModelList = modelList;
             mRecyclerView.setVisibility(View.VISIBLE);
-            mRecyclerView.setAdapter(new AuthorListAdapter(getContext(), this, modelList));
+            mRecyclerView.setAdapter(new AuthorListAdapter(getContext(), this, mModelList));
         }
     }
 
     @Override
     public void onAuthorItemClicked(AuthorModel model) {
-
+        if (mMainInterface != null) {
+            mMainInterface.onAuthorSelected(model.id);
+        }
     }
 
     //region --- Fragment Lifecycle ---
@@ -74,8 +79,19 @@ public class AuthorListFragment extends Fragment implements AuthorListTask.Resul
 
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
         mRecyclerView.addItemDecoration(new DividerItemDecoration(mRecyclerView.getContext(), RecyclerView.VERTICAL));
-        mRecyclerView.setVisibility(View.GONE);
-        new AuthorListTask(this).execute(getContext());
+        if (mModelList == null) {
+            mRecyclerView.setVisibility(View.GONE);
+            new AuthorListTask(this).execute(getContext());
+        } else {
+            mProgressBar.setVisibility(View.GONE);
+            mRecyclerView.setAdapter(new AuthorListAdapter(getContext(), this, mModelList));
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mMainInterface = null;
     }
 
     //endregion

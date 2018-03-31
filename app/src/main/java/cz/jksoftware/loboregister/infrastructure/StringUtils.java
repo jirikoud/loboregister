@@ -29,6 +29,13 @@ public class StringUtils {
         }
     }
 
+    public static String formatDate(@NonNull DateFormat dateFormat, Date date){
+        if (date == null){
+            return null;
+        }
+        return dateFormat.format(date);
+    }
+
     public static boolean isEqual(String string1, String string2) {
         return string1 == null && string2 == null || !(string1 == null || string2 == null) && string1.equals(string2);
     }

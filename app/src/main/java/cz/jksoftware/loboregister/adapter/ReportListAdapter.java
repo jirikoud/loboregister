@@ -31,7 +31,7 @@ public class ReportListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     private static final int VIEW_TYPE_PROGRESS = 1;
 
     public interface EventListener {
-        void onReportItemClicked(String authorId);
+        void onReportItemClicked(ReportModel reportModel);
 
         void onLoadMoreReports();
     }
@@ -54,12 +54,12 @@ public class ReportListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         void setModel(final ReportModel model) {
             mTextViewFullName.setText(model.getFullName());
             mTextViewDate.setText(mDateFormat.format(model.date));
-            mTextViewBody.setText(model.body);
+            mTextViewBody.setText(model.getBodyShort());
             mViewContent.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (mEventListener.get() != null) {
-                        mEventListener.get().onReportItemClicked(model.authorId);
+                        mEventListener.get().onReportItemClicked(model);
                     }
                 }
             });
@@ -95,7 +95,7 @@ public class ReportListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                     super.onScrolled(recyclerView, dx, dy);
                     int totalItemCount = linearLayoutManager.getItemCount();
                     int lastVisibleItem = linearLayoutManager.findLastVisibleItemPosition();
-                    if (!mIsLoading && totalItemCount <= (lastVisibleItem + visibleThreshold)) {
+                    if (!mIsLoading && mTotalCount > mItemList.size() && totalItemCount <= (lastVisibleItem + visibleThreshold)) {
                         // End has been reached
                         // Do something
                         if (mEventListener.get() != null) {
@@ -111,7 +111,11 @@ public class ReportListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     public void addReports(List<ReportModel> reportList) {
         int startIndex = mItemList.size();
         mItemList.addAll(reportList);
-        notifyItemRangeInserted(startIndex, reportList.size());
+        if (mItemList.size() != mTotalCount) {
+            notifyItemRangeInserted(startIndex, reportList.size());
+        } else {
+            notifyDataSetChanged();
+        }
         mIsLoading = false;
     }
 

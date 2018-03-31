@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Registr lobistických kontaktů</string>
+    <string name="app_name">Registr kontaktů</string>
+    <string name="app_long_name">Registr lobbistických kontaktů</string>
 
     <!-- Menu Items -->
     <string name="menu_item_contacts">Kontakty</string>
@@ -11,12 +12,22 @@
     <string name="api_toast_offline">Jste offline, ale tato akce vyžaduje připojení k internetu.</string>
     <string name="api_toast_connection_failed">Připojení selhalo, zkuste to znovu později.</string>
 
-    <!-- ReportList Fragment -->
+    <!-- Report List -->
     <string name="report_list_button_confirm">Potvrdit</string>
     <string name="report_list_button_cancel">Zrušit</string>
 
-    <!-- ContactList Fragment -->
+    <!-- Contact List -->
     <string name="contact_list_search">Hledat</string>
-    <string name="contact_list_total_format">%1$d záznamů</string>
+
+    <!-- Report Detail -->
+    <string name="report_detail_author">Autor:</string>
+    <string name="report_detail_date">Datum:</string>
+    <string name="report_detail_published">Publikováno:</string>
+    <string name="report_detail_received">Přijaté výhody</string>
+    <string name="report_detail_provided">Poskytnuté výhody</string>
+
+    <!-- Author Detail -->
+    <string name="author_detail_name">Jméno:</string>
+    <string name="author_detail_total">Kontaktů:</string>
 
 </resources>

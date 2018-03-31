@@ -4,6 +4,8 @@
     <color name="colorPrimaryDark">#000000</color>
     <color name="colorAccent">#2D84CD</color>
     <color name="colorWhite">#FFFFFF</color>
+    <color name="colorBackgroundGray">#F3F3F3</color>
+    <color name="colorBackground">#FFFFFF</color>
 
     <!-- Bottom menu -->
     <color name="colorBottomMenu">#FFFFFF</color>

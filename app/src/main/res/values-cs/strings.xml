@@ -30,4 +30,9 @@
     <string name="author_detail_name">Jméno:</string>
     <string name="author_detail_total">Kontaktů:</string>
 
+    <!-- Intro Alert -->
+    <string name="intro_alert_title">Varování</string>
+    <string name="intro_alert_message">Obsah registru je testovací a neaktuální. Pro aktuální obsah prosím přejděte na Pirátské fórum.</string>
+    <string name="intro_alert_button_ok">OK</string>
+
 </resources>

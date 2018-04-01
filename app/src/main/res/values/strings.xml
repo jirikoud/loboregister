@@ -29,4 +29,10 @@
     <!-- Author Detail -->
     <string name="author_detail_name">Name:</string>
     <string name="author_detail_total">Reports:</string>
+
+    <!-- Intro Alert -->
+    <string name="intro_alert_title">Warning</string>
+    <string name="intro_alert_message">The contents of the registry are test and outdated. For up-to-date content, please go to the Pirate Forum.</string>
+    <string name="intro_alert_button_ok">OK</string>
+
 </resources>

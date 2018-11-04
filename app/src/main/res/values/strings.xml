@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Register of contacts</string>
-    <string name="app_long_name">Register of lobbyist contacts</string>
+    <string name="app_name">Records of contacts</string>
+    <string name="app_long_name">Records of contacts and meetings</string>
 
     <!-- Menu Items -->
     <string name="menu_item_contacts">Contacts</string>
@@ -29,10 +29,5 @@
     <!-- Author Detail -->
     <string name="author_detail_name">Name:</string>
     <string name="author_detail_total">Reports:</string>
-
-    <!-- Intro Alert -->
-    <string name="intro_alert_title">Warning</string>
-    <string name="intro_alert_message">The contents of the registry are test and outdated. For up-to-date content, please go to the Pirate Forum.</string>
-    <string name="intro_alert_button_ok">OK</string>
 
 </resources>

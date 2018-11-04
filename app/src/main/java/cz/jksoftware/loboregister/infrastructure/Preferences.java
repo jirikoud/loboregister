@@ -25,6 +25,7 @@ public class Preferences {
         mIntroAlert = preferences.getBoolean(KEY_INTRO_ALERT, false);
     }
 
+    @SuppressWarnings("unused")
     public static Preferences getInstance(Context context) {
         if (mInstance == null) {
             mInstance = new Preferences(context);
@@ -32,10 +33,12 @@ public class Preferences {
         return mInstance;
     }
 
+    @SuppressWarnings("unused")
     public boolean getIntroAlert() {
         return mIntroAlert;
     }
 
+    @SuppressWarnings("unused")
     public void setIntroAlert(Context context, boolean introAlert) {
         mIntroAlert = introAlert;
         SharedPreferences.Editor editor = context.getSharedPreferences(PREFERENCES_NAME, Context.MODE_PRIVATE).edit();

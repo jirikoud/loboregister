@@ -5,7 +5,6 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -16,7 +15,6 @@ import cz.jksoftware.loboregister.fragment.AuthorDetailFragment;
 import cz.jksoftware.loboregister.fragment.AuthorListFragment;
 import cz.jksoftware.loboregister.fragment.ReportDetailFragment;
 import cz.jksoftware.loboregister.fragment.ReportListFragment;
-import cz.jksoftware.loboregister.infrastructure.Preferences;
 import cz.jksoftware.loboregister.interfaces.MainInterface;
 
 public class MainActivity extends AppCompatActivity implements MainInterface {
@@ -88,15 +86,6 @@ public class MainActivity extends AppCompatActivity implements MainInterface {
             }
         });
         bottomNavigationView.setSelectedItemId(R.id.menu_item_contacts);
-        if (!Preferences.getInstance(this).getIntroAlert()){
-            new AlertDialog.Builder(this)
-                    .setTitle(R.string.intro_alert_title)
-                    .setMessage(R.string.intro_alert_message)
-                    .setPositiveButton(R.string.intro_alert_button_ok, null)
-                    .setCancelable(false)
-                    .show();
-            Preferences.getInstance(this).setIntroAlert(this, true);
-        }
     }
 
     @Override

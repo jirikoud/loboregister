@@ -20,6 +20,7 @@ import java.net.URL;
 import java.security.GeneralSecurityException;
 import java.security.SecureRandom;
 import java.security.cert.X509Certificate;
+import java.util.zip.GZIPInputStream;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
@@ -80,12 +81,21 @@ public class Api {
         }
 
         StringBuilder builder = new StringBuilder();
-        InputStream inputStream = statusCode < HttpsURLConnection.HTTP_BAD_REQUEST ? httpConnection.getInputStream() : httpConnection.getErrorStream();
-        BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, charset));
-        for (String line; (line = reader.readLine()) != null; ) {
-            builder.append(line);
+        if (statusCode < HttpsURLConnection.HTTP_BAD_REQUEST) {
+            InputStream gzipStream = new GZIPInputStream(httpConnection.getInputStream());
+            BufferedReader reader = new BufferedReader(new InputStreamReader(gzipStream, charset));
+            for (String line; (line = reader.readLine()) != null; ) {
+                builder.append(line);
+            }
+            return builder.toString();
+        } else {
+            InputStream inputStream = httpConnection.getErrorStream();
+            BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, charset));
+            for (String line; (line = reader.readLine()) != null; ) {
+                builder.append(line);
+            }
+            return builder.toString();
         }
-        return builder.toString();
     }
 
     private static String getUrlString(String method) {

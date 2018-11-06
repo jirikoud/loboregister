@@ -136,5 +136,6 @@ public class AuthorDetailFragment extends Fragment implements AuthorDetailTask.R
         mMainInterface = null;
     }
 
+    
     //endregion
 }
